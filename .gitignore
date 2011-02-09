@@ -1,0 +1,5 @@
+*~
+.ensime
+.DS_Store
+target
+*/logs
