@@ -58,6 +58,16 @@
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId>net.liftweb</groupId>
+      <artifactId>lift-json_${scala.version}</artifactId>
+      <version>2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.6.1</version>
+    </dependency>
+    <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest</artifactId>
       <version>1.2</version>
@@ -67,6 +77,12 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.8.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>0.9.26</version>
       <scope>test</scope>
     </dependency>
     <dependency>
