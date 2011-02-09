@@ -5,13 +5,13 @@ import org.slf4j.LoggerFactory
 
 class ConfigurationNotFoundException(val key: String) extends Throwable("Configuration key "+key+" not found or failed to load")
 
-object ConfigService {
+object ConfigFactory {
   private val logger = LoggerFactory.getLogger(getClass.getName)
 
   import collection.mutable.Map
 
   private var backends: List[ConfigBackend] = Nil
-  private val configs = Map.empty[String, (ConfigBackend, Configuration)]
+  private val configs = Map.empty[String, (ConfigBackend, Any)]
   private val watchers = Map.empty[String, List[() => Unit]]
 
   // for testing
@@ -26,7 +26,7 @@ object ConfigService {
     backends = backend :: backends
   }
 
-  def get[T <: Configuration : Manifest](name: String): T =
+  def get[T : Manifest](name: String): T =
     synchronized {
       val (backend, config) = configs.getOrElseUpdate(name, lookupConfig(name))
       config.asInstanceOf[T]
@@ -40,7 +40,7 @@ object ConfigService {
     watchers.remove(key)
   }
 
-  protected def lookupConfig[T <: Configuration : Manifest](key: String): (ConfigBackend, T) = {
+  protected def lookupConfig[T : Manifest](key: String): (ConfigBackend, T) = {
     assert(backends.nonEmpty)
 
     val names = {
