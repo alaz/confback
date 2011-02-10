@@ -1,0 +1,82 @@
+h1. confback
+
+Configuration framework that delegates configuration data retrival to various backends.
+
+It's more or less like what "logback" project does in terms of logging, when you just declare @logger@ object in your clasess and configure logging in one place.
+
+h2. Getting and using configuration
+
+The configuration is just a plain "case class":
+
+<pre><code>package my.package
+case class ImageServiceConfig(val maxWidth: Int, val maxHeight: Int)</code></pre>
+
+And you consume it in your code like
+
+<pre><code>package my.package
+import com.osinka.confback.ConfigFactory
+
+class ImageService {
+  lazy val config = ConfigFactory.get[ImageServiceConfig]
+}</code></pre>
+
+/confback/ will search configuration by key @my.package.ImageServiceConfig@ and it's derivatives (more on this later). Otherwise you could call @get@ with key name of your choice (but the search algorithm will still try to produce derivative keys).
+
+Note, that the above code will create a static configuration object in @ImageService@, which means it will live as long as @ImageService@ lives -- configuration updates become impossible in runtime.
+
+h3. "Configurable"
+
+For your convenience you can mix in @Configurable@ trait. The same example above would look like:
+
+<pre><code>package my.package
+import com.osinka.confback.Configurable
+
+class ImageService extends Configurable[ImageServiceConfig] {
+
+  def myfunc {
+    val imageServiceConfig = config
+  }
+}</code></pre>
+
+As you can see, @Configurable@ takes a type argument and provides @config@ method that returns a configuration object of this type. @Configurable@ also provides a means of configuration reload, so that it will return a new object if the configuration changes.
+
+h3. Exceptions
+
+What if the configuration fails to load? No problem -- /confback/ gives you @opt@ methods:
+
+<pre><code>package my.package
+import com.osinka.confback.ConfigFactory
+
+class ImageService {
+  val DefaultConfig = ImageServiceConfig(120, 120)
+
+  lazy val config = ConfigFactory.opt[ImageServiceConfig] getOrElse DefaultConfig
+}</code></pre>
+
+h3. Key search algorithm
+
+When you supply a key parameter to @ConfigFactory.get@, the factory splits it into package name and class name. Then makes a few derivatives of package name (e.g. "my.package.name" becomes a list of "my.package.name", "package.name" and "name") and class name (it lowercases the class name and strips off "Config" suffix if the class name has it). Thus /confback/ looks up the configuration by these keys.
+
+h2. Configuring /confback/
+
+Your app must have class @Boot@ in package @bootstrap.confback@ -- /confback/ will try to load it once. The class constructor can be used to configure /confback/ backends. Example:
+
+<pre><code>package bootstrap.confback
+
+import net.lag.configgy.Configgy
+import com.osinka.confback.ConfigFactory
+
+class Boot {
+  Configgy.configure( "configgy.conf" )
+  ConfigFactory.add( Configgy.config )
+}</code></pre>
+
+h3. Backends
+
+You add backends to @ConfigFactory@ via its @add@ method.
+
+h3. Configgy
+
+h2. Subscription to configuration changes
+
+TBD

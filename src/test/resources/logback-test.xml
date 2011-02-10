@@ -2,16 +2,10 @@
 <configuration scan="false" debug="false">
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%-5p [%d{mm:ss.SSS}] [%thread] %logger{36}: %m%n</pattern>
+            <pattern>%-4p [%d{mm:ss.SSS}] [%thread] %logger{36}: %m%n</pattern>
         </encoder>
     </appender>
-    <appender name="file" class="ch.qos.logback.core.FileAppender">
-        <File>${buildDirectory}/logs/commons.log</File>
-        <encoder>
-            <pattern>%-5p [%d{mm:ss.SSS}] [%thread] %logger{36}: %m%n</pattern>
-        </encoder>
-    </appender>
-    <root level="DEBUG">
+    <root level="TRACE">
         <appender-ref ref="stdout"/>
     </root>
 </configuration>

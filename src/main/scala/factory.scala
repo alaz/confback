@@ -26,11 +26,23 @@ object ConfigFactory {
     backends = backend :: backends
   }
 
+  def key[T](implicit m: Manifest[T]) = m.erasure.getName
+
+  def get[T : Manifest]: T = get[T](key[T])
+
+  def opt[T : Manifest]: Option[T] = opt[T](key[T])
+
   def get[T : Manifest](name: String): T =
     synchronized {
       val (backend, config) = configs.getOrElseUpdate(name, lookupConfig(name))
       config.asInstanceOf[T]
     }
+
+  def opt[T : Manifest](name: String): Option[T] =
+    handling(classOf[Throwable]) by {t =>
+      logger.warn("Failed to load configuration by key %s".format(name))
+      None
+    } apply { Some(get[T](name)) }
 
   def subscribe(key: String, f: => Unit) {
     watchers(key) = {() => f} :: watchers.getOrElse(key, Nil)
