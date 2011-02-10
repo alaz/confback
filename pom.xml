@@ -161,7 +161,7 @@
         </dependencies>
         <configuration>
           <releaseProfiles>release</releaseProfiles>
-          <goals>install deploy</goals>
+          <goals>install</goals> <!-- "deploy" when public -->
         </configuration>
       </plugin>
       <plugin>
