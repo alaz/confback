@@ -75,7 +75,11 @@ h3. Backends
 
 You add backends to @ConfigFactory@ via its @add@ method.
 
+TBD
+
 h3. Configgy
+
+TBD
 
 h2. Subscription to configuration changes
 
