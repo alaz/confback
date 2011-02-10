@@ -20,7 +20,7 @@ class ImageService {
   lazy val config = ConfigFactory.get[ImageServiceConfig]
 }</code></pre>
 
-/confback/ will search configuration by key @my.package.ImageServiceConfig@ and it's derivatives (more on this later). Otherwise you could call @get@ with key name of your choice (but the search algorithm will still try to produce derivative keys).
+_confback_ will search configuration by key @my.package.ImageServiceConfig@ and it's derivatives (more on this later). Otherwise you could call @get@ with key name of your choice (but the search algorithm will still try to produce derivative keys).
 
 Note, that the above code will create a static configuration object in @ImageService@, which means it will live as long as @ImageService@ lives -- configuration updates become impossible in runtime.
 
@@ -42,7 +42,7 @@ As you can see, @Configurable@ takes a type argument and provides @config@ metho
 
 h3. Exceptions
 
-What if the configuration fails to load? No problem -- /confback/ gives you @opt@ methods:
+What if the configuration fails to load? No problem -- _confback_ gives you @opt@ methods:
 
 <pre><code>package my.package
 import com.osinka.confback.ConfigFactory
@@ -55,11 +55,11 @@ class ImageService {
 
 h3. Key search algorithm
 
-When you supply a key parameter to @ConfigFactory.get@, the factory splits it into package name and class name. Then makes a few derivatives of package name (e.g. "my.package.name" becomes a list of "my.package.name", "package.name" and "name") and class name (it lowercases the class name and strips off "Config" suffix if the class name has it). Thus /confback/ looks up the configuration by these keys.
+When you supply a key parameter to @ConfigFactory.get@, the factory splits it into package name and class name. Then makes a few derivatives of package name (e.g. "my.package.name" becomes a list of "my.package.name", "package.name" and "name") and class name (it lowercases the class name and strips off "Config" suffix if the class name has it). Thus _confback_ looks up the configuration by these keys.
 
-h2. Configuring /confback/
+h2. Configuring _confback_
 
-Your app must have class @Boot@ in package @bootstrap.confback@ -- /confback/ will try to load it once. The class constructor can be used to configure /confback/ backends. Example:
+Your app must have class @Boot@ in package @bootstrap.confback@ -- _confback_ will try to load it once. The class constructor can be used to configure _confback_ backends. Example:
 
 <pre><code>package bootstrap.confback
 
