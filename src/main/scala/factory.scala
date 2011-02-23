@@ -92,13 +92,7 @@ object ConfigFactory {
     logger.error("Failed to load class bootstrap.confback.Boot", t)
   } apply {
     Class.forName("bootstrap.confback.Boot").newInstance
+    if (backends.isEmpty)
+      logger.error("No configuration backends. You have to add them in bootstrap.confback.Boot!")
   }
-}
-
-// Convenience implicits for Boot
-trait ConfigBootstrap {
-  import backend._
-  import net.lag.configgy.ConfigMap
-
-  implicit def fromConfiggy(configMap: ConfigMap) = new ConfiggyBackend(configMap)
 }
