@@ -181,6 +181,7 @@
             <exclude>*.xml</exclude>
             <exclude>*.textile</exclude>
             <exclude>project/**</exclude>
+            <exclude>.ensime</exclude>
           </excludes>
           <useDefaultExcludes>true</useDefaultExcludes>
           <mapping>
