@@ -6,6 +6,12 @@ import net.lag.configgy.{Configgy, ConfigMap}
 import net.liftweb.json.{JsonAST, JsonDSL, Extraction}
 import org.slf4j.LoggerFactory
 
+object ConfiggyBackend {
+  def apply(configMap: ConfigMap) = new ConfiggyBackend(configMap)
+
+  implicit def fromConfiggy(configMap: ConfigMap) = apply(configMap)
+}
+
 class ConfiggyBackend(val configMap: ConfigMap = Configgy.config) extends ConfigBackend {
   private val logger = LoggerFactory.getLogger(getClass.getName)
 

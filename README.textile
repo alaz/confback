@@ -50,7 +50,7 @@ import com.osinka.confback.ConfigFactory
 class ImageService {
   val DefaultConfig = ImageServiceConfig(120, 120)
 
-  lazy val config = ConfigFactory.opt[ImageServiceConfig] getOrElse DefaultConfig
+  def config = ConfigFactory.opt[ImageServiceConfig] getOrElse DefaultConfig
 }</code></pre>
 
 h3. Key search algorithm
@@ -65,6 +65,7 @@ Your app must have class @Boot@ in package @bootstrap.confback@ -- _confback_ wi
 
 import net.lag.configgy.Configgy
 import com.osinka.confback.ConfigFactory
+import com.osinka.confback.backend.ConfiggyBackend._
 
 class Boot {
   Configgy.configure( "configgy.conf" )
@@ -73,9 +74,15 @@ class Boot {
 
 h3. Backends
 
-You add backends to @ConfigFactory@ via its @add@ method.
+You add backends to @ConfigFactory@ via its @add@ method during your application initialization
 
-TBD
+<pre><code>
+def init() {
+  ConfigFactory.add(ConfiggyBackend(configMap))
+}</code></pre>
+
+
+h3. Mock
 
 h3. Configgy
 

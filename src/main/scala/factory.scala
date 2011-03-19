@@ -26,6 +26,17 @@ object ConfigFactory {
     backends = backend :: backends
   }
 
+  /**
+   * To mock configuration
+   */
+  def runWith[R](mock: ConfigBackend*)(f: => R): R =
+    ultimately {
+      backends = backends.takeRight(backends.length - mock.length)
+    } apply {
+      backends = mock.toList ::: backends
+      f
+    }
+
   def key[T](implicit m: Manifest[T]) = m.erasure.getName
 
   def get[T : Manifest]: T = get[T](key[T])
