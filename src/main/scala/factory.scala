@@ -54,21 +54,27 @@ object ConfigFactory {
 
   def key[T](implicit m: Manifest[T]) = m.erasure.getName
 
+  def refreshOrCached[T : Manifest]: Option[T] = refreshOrCached[T](key[T])
+
+  def refreshOrCached[T : Manifest](name: String): Option[T] =
+    reget[T](name) orElse opt[T](name)
+
   def get[T : Manifest]: T = get[T](key[T])
 
   def opt[T : Manifest]: Option[T] = opt[T](key[T])
 
-  def get[T : Manifest](name: String): T =
-    synchronized {
-      val (backend, config) = configs.getOrElseUpdate(name, lookupConfig(name))
-      config.asInstanceOf[T]
+  def get[T : Manifest](name: String): T = opt[T](name) getOrElse { throw new ConfigurationNotFoundException(name) }
+
+  def reget[T : Manifest](name: String): Option[T] =
+    lookupConfig[T](name) map { t => 
+      configs.update(name, t)
+      t._2
     }
 
   def opt[T : Manifest](name: String): Option[T] =
-    handling(classOf[Throwable]) by {t =>
-      logger.warn("Failed to load configuration by key %s".format(name))
-      None
-    } apply { Some(get[T](name)) }
+    synchronized {
+      configs.get(name) map { _._2.asInstanceOf[T] } orElse { reget[T](name) }
+    }
 
   def subscribe(key: String, f: => Unit) {
     watchers(key) = {() => f} :: watchers.getOrElse(key, Nil)
@@ -78,7 +84,7 @@ object ConfigFactory {
     watchers.remove(key)
   }
 
-  protected def lookupConfig[T : Manifest](key: String): (ConfigBackend, T) = {
+  protected def lookupConfig[T : Manifest](key: String): Option[(ConfigBackend, T)] = {
     assert(backends.nonEmpty)
 
     val names = {
@@ -110,7 +116,7 @@ object ConfigFactory {
        }
 
        (backend, config)
-     } ).headOption.getOrElse(throw new ConfigurationNotFoundException(key))
+     } ).headOption
   }
 
   // init
