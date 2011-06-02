@@ -58,7 +58,7 @@
     <dependency>
       <groupId>net.lag</groupId>
       <artifactId>configgy</artifactId>
-      <version>2.0.0</version>
+      <version>2.0.2</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -273,6 +273,11 @@
       <id>scala-tools.org</id>
       <name>Scala-Tools Maven2 Repository</name>
       <url>http://scala-tools.org/repo-releases</url>
+    </repository>
+    <repository>
+      <id>twitter</id>
+      <name>Twitter Maven2 Repository</name>
+      <url>http://maven.twttr.com</url>
     </repository>
   </repositories>
 
