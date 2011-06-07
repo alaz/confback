@@ -95,7 +95,8 @@ object ConfigFactory {
 
       val packageVariants = pkg.scanRight(List.empty[String]) { _ :: _ }.tail.reverse
       val clzVariants = {
-        def withLowerCase(s: String) = s :: s.toLowerCase :: Nil
+        def firstLower(s: String) = s.substring(0,1).toLowerCase + s.substring(1)
+        def withLowerCase(s: String) = s :: firstLower(s) :: Nil
         
         (withLowerCase(clz) ::: withLowerCase(clz stripSuffix "Config")).distinct
       }
