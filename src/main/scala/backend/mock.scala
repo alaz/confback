@@ -21,6 +21,8 @@ class MockBackend(val configs: Map[String,Any]) extends ConfigBackend {
     configs.get(name) filter { implicitly[Manifest[T]].erasure.isInstance } map { _.asInstanceOf[T] }
 
   override def subscribe(f: => Unit) {}
+
+  override def toString = "MockBackend [%s]" format configs.keySet.mkString(", ")
 }
 
 object MockBackend {
