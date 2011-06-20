@@ -67,7 +67,7 @@ class ConfiggyBackend(val configMap: ConfigMap = Configgy.config) extends Config
   override def get[T : Manifest](name: String): Option[T] = {
     def extract(cm: ConfigMap) = {
       def recognitionError(t: Throwable) = {
-        logger.debug("Failed to recognize configgy map %s as %s".format(cm, implicitly[Manifest[T]].erasure.getName), t)
+        logger.warn("Failed to recognize configgy map %s as %s".format(cm, implicitly[Manifest[T]].erasure.getName), t)
         None
       }
 
