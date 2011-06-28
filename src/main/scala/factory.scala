@@ -27,13 +27,11 @@ object ConfigFactory {
 
   private var backends: List[ConfigBackend] = Nil
   private val configs = Map.empty[String, (ConfigBackend, Any)]
-  private val watchers = Map.empty[String, List[() => Unit]]
 
   // for testing
   private[confback] def clear() {
     backends = Nil
     configs.clear()
-    watchers.clear()
   }
 
   def add(backend: ConfigBackend) {
@@ -76,14 +74,6 @@ object ConfigFactory {
       configs.get(name) map { _._2.asInstanceOf[T] } orElse { reget[T](name) }
     }
 
-  def subscribe(key: String, f: => Unit) {
-    watchers(key) = {() => f} :: watchers.getOrElse(key, Nil)
-  }
-
-  def unsubscribe(key: String) {
-    watchers.remove(key)
-  }
-
   protected def lookupConfig[T : Manifest](key: String): Option[(ConfigBackend, T)] = {
     assert(backends.nonEmpty)
 
@@ -109,15 +99,7 @@ object ConfigFactory {
     (for {n <- names.toStream
           backend <- backends
           config <- backend.get[T](n)}
-     yield {
-       logger.debug("Found configuration %s for `%s` backend %s".format(n, key, backend))
-       backend subscribe {
-         logger.info("Configuration %s has changed".format(n))
-         watchers(key) foreach {_()}
-       }
-
-       (backend, config)
-     } ).headOption
+     yield (backend, config) ).headOption
   }
 
   // init

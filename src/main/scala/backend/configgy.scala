@@ -85,9 +85,5 @@ class ConfiggyBackend(val configMap: ConfigMap = Configgy.config) extends Config
     configMap.getConfigMap(name) flatMap {cm => extract(cm)}
   }
 
-  override def subscribe(f: => Unit) {
-    configMap subscribe { configMap => f }
-  }
-
   override def toString: String = "ConfiggyBackend "+configMap.getName()
 }

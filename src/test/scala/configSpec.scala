@@ -37,16 +37,11 @@ class configSpec extends FixtureSpec with MustMatchers {
   }
 
   describe("Config key discovery") {
-    it("should cache config") { backend =>
+    it("should return config") { backend =>
       ConfigFactory.get[Config]("test") must equal(Config("test", 1))
-      val n = backend.subscriptions
-
-      ConfigFactory.get[Config]("test") must equal(Config("test", 1))
-      backend.subscriptions must equal(n)
     }
     it("should discover by exact name") { backend =>
       ConfigFactory.get[Config]("test") must equal(Config("test", 1))
-      backend.subscriptions must equal(1)
       backend.namesAsked must equal(List("test"))
     }
     it("should discover by capitalized name") { backend =>
@@ -67,7 +62,6 @@ class configSpec extends FixtureSpec with MustMatchers {
   case class Config(val name: String, val serial: Int)
 
   class MockBackend(val positiveName: String) extends ConfigBackend {
-    var subscriptions = 0
     var serial = 0
     val namesAsked = collection.mutable.ListBuffer[String]()
 
@@ -79,10 +73,6 @@ class configSpec extends FixtureSpec with MustMatchers {
         Some( new Config(name, serial).asInstanceOf[T] )
       } else
         None
-    }
-
-    override def subscribe(f: => Unit) {
-      subscriptions += 1
     }
   }
 }
