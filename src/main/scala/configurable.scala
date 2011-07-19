@@ -17,6 +17,8 @@ package com.osinka.confback
 
 /**
  * Configurable entity extends this trait
+ * 
+ * @author Alexander Azarov <azarov@osinka.ru>
  */
 trait Configurable[T] {
   def configKey(implicit m: Manifest[T]) = m.erasure.getName

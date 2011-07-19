@@ -15,6 +15,9 @@
  */
 package com.osinka.confback
 
+/**
+ * @author Alexander Azarov <azarov@osinka.ru>
+ */
 trait ConfigBackend {
   def get[T : Manifest](name: String): Option[T]
 }

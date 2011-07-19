@@ -21,12 +21,18 @@ import net.lag.configgy.{Configgy, ConfigMap}
 import net.liftweb.json.{JsonAST, JsonDSL, Extraction}
 import org.slf4j.LoggerFactory
 
+/**
+ * @author Alexander Azarov <azarov@osinka.ru>
+ */
 object ConfiggyBackend {
   def apply(configMap: ConfigMap) = new ConfiggyBackend(configMap)
 
   implicit def fromConfiggy(configMap: ConfigMap) = apply(configMap)
 }
 
+/**
+ * @author Alexander Azarov <azarov@osinka.ru>
+ */
 class ConfiggyBackend(val configMap: ConfigMap = Configgy.config) extends ConfigBackend {
   private val logger = LoggerFactory.getLogger(getClass.getName)
 

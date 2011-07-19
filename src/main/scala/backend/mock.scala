@@ -16,6 +16,9 @@
 package com.osinka.confback
 package backend
 
+/**
+ * @author Alexander Azarov <azarov@osinka.ru>
+ */
 class MockBackend(val configs: Map[String,AnyRef]) extends ConfigBackend {
   def get[T : Manifest](name: String): Option[T] =
     configs.get(name) filter {implicitly[Manifest[T]].erasure.isInstance} map { _.asInstanceOf[T] }
@@ -23,6 +26,9 @@ class MockBackend(val configs: Map[String,AnyRef]) extends ConfigBackend {
   override def toString = "MockBackend [%s]" format configs.keySet.mkString(", ")
 }
 
+/**
+ * @author Alexander Azarov <azarov@osinka.ru>
+ */
 object MockBackend {
   def apply(configs: Map[String,AnyRef]) = new MockBackend(configs)
   def apply(configs: (String,AnyRef)*): MockBackend = apply(Map(configs:_*))

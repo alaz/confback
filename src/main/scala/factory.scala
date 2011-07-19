@@ -18,8 +18,14 @@ package com.osinka.confback
 import util.control.Exception._
 import org.slf4j.LoggerFactory
 
+/**
+ * @author Alexander Azarov <azarov@osinka.ru>
+ */
 class ConfigurationNotFoundException(val key: String) extends Throwable("Configuration key "+key+" not found or failed to load")
 
+/**
+ * @author Alexander Azarov <azarov@osinka.ru>
+ */
 object ConfigFactory {
   private val logger = LoggerFactory.getLogger(getClass.getName)
 
