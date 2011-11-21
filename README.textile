@@ -4,6 +4,8 @@ Configuration framework that delegates configuration data retrival to various ba
 
 It's more or less like what "logback" project does in terms of logging, when you just declare @logger@ object in your clasess and configure logging in one place.
 
+*NOTE*: The project is neither supported nor being maintained, as the company projects migrated to more idiomatic approach around Twitter Eval library.
+
 h2. Getting and using configuration
 
 The configuration is just a plain "case class":
@@ -81,13 +83,10 @@ def init() {
   ConfigFactory.add(ConfiggyBackend(configMap))
 }</code></pre>
 
-
 h3. Mock
-
-h3. Configgy
 
 TBD
 
-h2. Subscription to configuration changes
+h3. Configgy
 
 TBD
